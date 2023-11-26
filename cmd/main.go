@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/piohei/video-concatter/internal/downloader"
+	"github.com/piohei/video-concatter/internal/ffmpeg"
 	"io"
 	"log"
 	"os"
@@ -35,7 +37,14 @@ func main() {
 		log.Fatalf("error loading input data: %s", err)
 	}
 
-	log.Println(input)
+	d := downloader.NewDownloader(downloader.Retries(3))
+	ff := ffmpeg.NewFFmpeg()
+	for i, c := range input.Clips {
+		in := fmt.Sprintf("/tmp/i_%d.mp4", i)
+		out := fmt.Sprintf("/tmp/o_%d.mp4", i)
+		d.Download(c.Url, in)
+		ff.ClipVideo(in, out, c.Start, c.End)
+	}
 }
 
 func loadInput(path string) (*Input, error) {

@@ -4,19 +4,17 @@ import "fmt"
 
 type TimeString string
 
-type commandFormatter struct {
-	binPath string
+type commandArgsFormatter struct {
 }
 
-func (cf *commandFormatter) ClipVideo(input, output string, start, end int) string {
-	return fmt.Sprintf(
-		"%s -ss %s -to %s -i %s -c copy %s",
-		cf.binPath,
-		secondsToTimeString(start),
-		secondsToTimeString(end),
-		input,
-		output,
-	)
+func (cf *commandArgsFormatter) clipVideo(input, output string, start, end int) []string {
+	return []string{
+		"-ss", string(secondsToTimeString(start)),
+		"-to", string(secondsToTimeString(end)),
+		"-i", input,
+		"-c", "copy",
+		"-y", output,
+	}
 }
 
 func secondsToTimeString(tsec int) TimeString {
