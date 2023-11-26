@@ -4,7 +4,7 @@ build:
 	go build -o bin/${BINARY_NAME} cmd/main.go
 
 run: build
-	./bin/${BINARY_NAME}
+	./bin/${BINARY_NAME} -input docs/examples/input.json
 
 clean:
 	go clean

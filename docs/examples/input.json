@@ -1,0 +1,14 @@
+{
+  "clips": [
+    {
+      "url": "https://scoreplay-eu-mam-media-transformed.s3.amazonaws.com/433/170448/video_6932314_6610603_720p.mp4",
+      "start": 10,
+      "end": 35
+    },{
+      "url": "https://scoreplay-eu-mam-media-transformed.s3.amazonaws.com/433/200756/video_8117906_7796238_720p.mp4",
+      "start": 120,
+      "end": 150
+    }
+  ],
+  "output_format": "4:3"
+}
