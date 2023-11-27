@@ -25,12 +25,18 @@ func main() {
 	var ffmpegBin string
 
 	flag.StringVar(&inputPath, "input", "input.json", "path to file with all configuration")
-	flag.StringVar(&inputPath, "output", "result.mp4", "path where to store output video")
-	flag.StringVar(&inputPath, "ffmpegBin", "ffmpeg", "path to FFmpeg binary used for processing")
+	flag.StringVar(&outputPath, "output", "result.mp4", "path where to store output video")
+	flag.StringVar(&ffmpegBin, "ffmpegBin", "ffmpeg", "path to FFmpeg binary used for processing")
 	flag.Parse()
 
 	if inputPath == "" {
 		log.Fatalf("flag 'input' not passed or empty.")
+	}
+	if outputPath == "" {
+		log.Fatalf("flag 'output' not passed or empty.")
+	}
+	if ffmpegBin == "" {
+		log.Fatalf("flag 'ffmpegBin' not passed or empty.")
 	}
 
 	config, err := configuration.Load(inputPath)
@@ -40,10 +46,12 @@ func main() {
 
 	ff := ffmpeg.NewFFmpeg(ffmpegBin)
 	inputs := toFFmpegClippedInput(config.Input.Clips)
+	log.Printf("Starting processing videos...")
 	err = ff.ClipAndJoinVideo(inputs, outputPath, config.Input.OutputFormat)
 	if err != nil {
 		log.Fatalf("error while processing videos: %s", err)
 	}
+	log.Printf("Done.")
 }
 
 func toFFmpegClippedInput(inputClips []configuration.InputClip) []ffmpeg.ClippedInput {

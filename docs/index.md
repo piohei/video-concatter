@@ -18,9 +18,13 @@ To run application with input file from docs ([click](./examples/input.json)) ju
 1. [ADR-02 Input data](./adr/adr_02_input_data.md)
 1. [ADR-03 Log format](./adr/adr_03_log_format.md)
 
+# Challenges
+
+[Click](./challenges.md)
+
 # Improvements
 
-1. Parsing FFmpeg output to better show progress.
+1. Parsing FFmpeg output to better show progress and reduce noise.
 2. Capture exit codes of FFmpeg to better inform about errors.
 3. Decide if containers/isolating should be used or not (file from URL is downloaded - my cause security issues).
 4. Allow for more detailed description of output format.
@@ -29,3 +33,5 @@ To run application with input file from docs ([click](./examples/input.json)) ju
 7. Introduce better logging (uber-go/zap lib for example).
 8. Use Cobra/Viper if application will grow.
 9. Use structured logging for easier automation and log parsing.
+10. Add more tests fot better test coverage.
+11. Add integration e2e test to check everything works.
