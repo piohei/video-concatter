@@ -1,14 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/piohei/video-concatter/internal/downloader"
+	"github.com/piohei/video-concatter/internal/configuration"
 	"github.com/piohei/video-concatter/internal/ffmpeg"
-	"io"
 	"log"
-	"os"
 )
 
 type Input struct {
@@ -32,43 +29,28 @@ func main() {
 		log.Fatalf("flag 'input' not passed or empty.")
 	}
 
-	input, err := loadInput(inputPath)
+	config, err := configuration.Load(inputPath)
 	if err != nil {
-		log.Fatalf("error loading input data: %s", err)
+		log.Fatalf("error loading configuration: %s", err)
 	}
 
-	d := downloader.NewDownloader(downloader.Retries(3))
 	ff := ffmpeg.NewFFmpeg()
-	for i, c := range input.Clips {
-		in := fmt.Sprintf("/tmp/i_%d.mp4", i)
-		out := fmt.Sprintf("/tmp/o_%d.mp4", i)
-		d.Download(c.Url, in)
-		ff.ClipVideo(in, out, c.Start, c.End)
-	}
+	inputs := toFFmpegClippedInput(config.Input.Clips)
+	ff.ClipAndJoinVideo(inputs, outputFilePath(0), config.Input.OutputFormat)
 }
 
-func loadInput(path string) (*Input, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, fmt.Errorf("error opening file: %s", err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Printf("error closing input file: %s", err)
-		}
-	}(file)
+func outputFilePath(index int) string {
+	return fmt.Sprintf("/tmp/o_%d.mp4", index)
+}
 
-	bytes, err := io.ReadAll(file)
-	if err != nil {
-		return nil, fmt.Errorf("error reading file: %s", err)
+func toFFmpegClippedInput(inputClips []configuration.InputClip) []ffmpeg.ClippedInput {
+	var res []ffmpeg.ClippedInput
+	for _, c := range inputClips {
+		res = append(res, ffmpeg.ClippedInput{
+			Input: c.Url,
+			Start: c.Start,
+			End:   c.End,
+		})
 	}
-
-	input := &Input{}
-	err = json.Unmarshal(bytes, input)
-	if err != nil {
-		return nil, fmt.Errorf("error decoding file: %s", err)
-	}
-
-	return input, nil
+	return res
 }
