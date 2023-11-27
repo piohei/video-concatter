@@ -10,10 +10,9 @@ type ClippedInput struct {
 	Start, End int
 }
 
-func NewFFmpeg() *FFmpeg {
+func NewFFmpeg(ffmpegBin string) *FFmpeg {
 	return &FFmpeg{
-		//commandExecutor:      &commandExecutor{binPath: "ffmpeg"},
-		commandExecutor:      &commandExecutor{binPath: "/home/piotr/Downloads/ffmpeg-5.1.1-amd64-static/ffmpeg"},
+		commandExecutor:      &commandExecutor{binPath: ffmpegBin},
 		commandArgsFormatter: &commandArgsFormatter{},
 	}
 }

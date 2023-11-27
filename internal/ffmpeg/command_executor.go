@@ -6,9 +6,6 @@ import (
 	"os/exec"
 )
 
-type command struct {
-}
-
 type commandExecutor struct {
 	binPath string
 }

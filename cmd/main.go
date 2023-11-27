@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
+
 	"github.com/piohei/video-concatter/internal/configuration"
 	"github.com/piohei/video-concatter/internal/ffmpeg"
-	"log"
 )
 
 type Input struct {
@@ -21,8 +21,12 @@ type InputClip struct {
 
 func main() {
 	var inputPath string
+	var outputPath string
+	var ffmpegBin string
 
 	flag.StringVar(&inputPath, "input", "input.json", "path to file with all configuration.")
+	flag.StringVar(&inputPath, "output", "result.mp4", "path where to store output video.")
+	flag.StringVar(&inputPath, "ffmpegBin", "ffmpeg", "path to FFmpeg binary used for processing.")
 	flag.Parse()
 
 	if inputPath == "" {
@@ -34,13 +38,12 @@ func main() {
 		log.Fatalf("error loading configuration: %s", err)
 	}
 
-	ff := ffmpeg.NewFFmpeg()
+	ff := ffmpeg.NewFFmpeg(ffmpegBin)
 	inputs := toFFmpegClippedInput(config.Input.Clips)
-	ff.ClipAndJoinVideo(inputs, outputFilePath(0), config.Input.OutputFormat)
-}
-
-func outputFilePath(index int) string {
-	return fmt.Sprintf("/tmp/o_%d.mp4", index)
+	err = ff.ClipAndJoinVideo(inputs, outputPath, config.Input.OutputFormat)
+	if err != nil {
+		log.Fatalf("error while processing videos: %s", err)
+	}
 }
 
 func toFFmpegClippedInput(inputClips []configuration.InputClip) []ffmpeg.ClippedInput {
