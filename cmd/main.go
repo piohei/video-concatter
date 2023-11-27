@@ -24,9 +24,9 @@ func main() {
 	var outputPath string
 	var ffmpegBin string
 
-	flag.StringVar(&inputPath, "input", "input.json", "path to file with all configuration.")
-	flag.StringVar(&inputPath, "output", "result.mp4", "path where to store output video.")
-	flag.StringVar(&inputPath, "ffmpegBin", "ffmpeg", "path to FFmpeg binary used for processing.")
+	flag.StringVar(&inputPath, "input", "input.json", "path to file with all configuration")
+	flag.StringVar(&inputPath, "output", "result.mp4", "path where to store output video")
+	flag.StringVar(&inputPath, "ffmpegBin", "ffmpeg", "path to FFmpeg binary used for processing")
 	flag.Parse()
 
 	if inputPath == "" {

@@ -111,24 +111,6 @@ func TestValidate(t *testing.T) {
 					Clips: []InputClip{
 						{
 							Url:   "http://example.com",
-							Start: 100 * 60 * 60,
-							End:   100*60*60 + 1,
-						},
-					},
-					OutputFormat: "16:9",
-				},
-			},
-			errors: []string{
-				"clip[0]: start must be less than 359999",
-				"clip[0]: end must be less than 359999",
-			},
-		},
-		{
-			config: &Configuration{
-				Input: &Input{
-					Clips: []InputClip{
-						{
-							Url:   "http://example.com",
 							Start: 0,
 							End:   1,
 						},

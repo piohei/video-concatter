@@ -6,9 +6,6 @@ import (
 	"regexp"
 )
 
-// maxTime represent maximum number of seconds that format hh:mm:ss can handle
-const maxTime = 100*60*60 - 1
-
 var validOutputFormat = regexp.MustCompile(`^\d+:\d+$`)
 
 type Validator struct{}
@@ -56,12 +53,6 @@ func (v *Validator) validateClip(index int, clip InputClip) []error {
 	}
 	if clip.End < 0 {
 		errors = append(errors, clipValidationError(index, "end must be at least 0"))
-	}
-	if clip.Start > maxTime {
-		errors = append(errors, clipValidationError(index, fmt.Sprintf("start must be less than %d", maxTime)))
-	}
-	if clip.Start > maxTime {
-		errors = append(errors, clipValidationError(index, fmt.Sprintf("end must be less than %d", maxTime)))
 	}
 	if clip.End <= clip.Start {
 		errors = append(errors, clipValidationError(index, "end must be greater than start"))
